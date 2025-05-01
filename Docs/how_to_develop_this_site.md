@@ -5,5 +5,9 @@ django-admin startproject config .
 ```
 
 ```
+python manage.py startapp app
+```
+
+```
 python manage.py runserver
 ```
