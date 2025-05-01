@@ -1,16 +1,65 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='ja'>
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>YouTube Subtitle Exporter</title>
+    <style>
+        .subtitle-container {
+            margin-top: 2rem;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .subtitle-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+        .timestamp {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .error {
+            color: red;
+            margin: 1rem 0;
+        }
+        form {
+            margin: 2rem 0;
+        }
+        input[type="text"] {
+            width: 100%;
+            max-width: 600px;
+            padding: 8px;
+            margin: 8px 0;
+        }
+    </style>
 </head>
 <body>
     <h1>YouTube Subtitle Exporter</h1>
-    <form action="" method="get">
+    <form action="" method="post">
+        {% csrf_token %}
         <label for="url">字幕を取得したいYouTubeの動画URLを入力してください。</label>
-        <input type="text" id="url" name="url" placeholder="https://www.youtube.com/watch?v=">
+        <input type="text" id="url" name="url" placeholder="https://www.youtube.com/watch?v=" required>
         <button type="submit">送信</button>
     </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if subtitles %}
+        <div class="subtitle-container">
+            <h2>字幕一覧</h2>
+            {% if video_url %}
+                <p>動画URL: <a href="{{ video_url }}" target="_blank">{{ video_url }}</a></p>
+            {% endif %}
+            {% for subtitle in subtitles %}
+                <div class="subtitle-item">
+                    <div class="timestamp">{{ subtitle.start|floatformat:2 }}秒 - {{ subtitle.duration|floatformat:2 }}秒</div>
+                    <div class="text">{{ subtitle.text }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </body>
 </html>
