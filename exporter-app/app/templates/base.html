@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}YouTube Subtitle Exporter{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen flex flex-col transition-colors duration-200" 
+      x-data="{ 
+          darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+          init() {
+              window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                  this.darkMode = e.matches;
+              });
+          }
+      }" 
+      :class="{ 'dark': darkMode }">
+    
+    {% include 'includes/header.html' %}
+
+    <main class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'includes/footer.html' %}
+</body>
+</html>
